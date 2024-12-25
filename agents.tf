@@ -179,7 +179,7 @@ resource "hcloud_floating_ip" "agents" {
   for_each = { for k, v in local.agent_nodes : k => v if coalesce(lookup(v, "floating_ip"), false) }
 
   type              = "ipv4"
-  labels            = local.labels
+  labels            = merge(local.labels, { "nodepool_name" = each.value.nodepool_name })
   home_location     = each.value.location
   delete_protection = var.enable_delete_protection.floating_ip
 }
